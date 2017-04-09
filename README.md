@@ -1,22 +1,29 @@
 # roman-numeral-convert
 
+
+
 <center><img src="http://i.imgur.com/j1Zs8ad.gif"></center>
 
-This tool will convert **any** integrer to a roman numeral provided it's not too large or negative and also it may fail.
+
+
+Convert **any** integrer to a roman numeral provided it's not too large or it may fail or hang.
 
     npm install roman-numeral-convert
 
+	/*and then*/
     const Numeral = require('roman-numeral-convert');
-    new Numeral(19); /*XIX*/
+    let nineteen = new Numeral(19); /*XIX*/
 
     /*you can also get the .number property to avoid type magic*/
     new Numeral(19).number;
 
+## cool things
 You can pass a second argument as to override anything on data/data
 
     const Numeral = require('roman-numeral-convert');
-    new Numeral(19,{
-        tokens: {
+	
+    let puke = new Numeral(19,{
+		tokens: {
     		1: '👉',
     		5: '🙅',
     		10: '🤢',
@@ -24,9 +31,12 @@ You can pass a second argument as to override anything on data/data
     		100: '🤡',
     		500: '💩',
     		1000: '🤖',
-    	}
-    }); /*🤢👉🤢*/
+		}
+    }); 
+	
+	console.log(puke); /*🤢👉🤢*/
 
+## cooler things
 You can also use it as a cli tool because why would you not want that i mean this is so useful
 
     sudo npm install roman-numeral-convert -g
