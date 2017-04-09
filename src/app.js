@@ -80,27 +80,17 @@ module.exports = class {
 
 
 
-	toString() {
-
-		return this.number;
-
-	}
-
-
-
-	constructor(number,customData={}){
+	convert(number) {
 
 		number = parseInt(number);
 		if(isNaN(number)) number = 0;
-
-		this.data = Object.assign({},defaultData,customData);
 
 		let negative = number < 0;
 		let returnable = '';
 		let { tokenKeys } = getTokens(number,this.data);
 
 		if(number === 0) {
-			return data.zero;
+ 			return this.data.zero;
 		}
 
 		if(negative) {
@@ -138,8 +128,25 @@ module.exports = class {
 
 		}
 
-		this.number = (negative?'-':'')+returnable;
+ 		return (negative?'-':'')+returnable;
+
+	}
+
+
+
+	constructor(number,customData={}){
+
+		this.data = Object.assign({},defaultData,customData);
+		this.number = this.convert(number);
 
 	};
+
+
+
+	toString() {
+
+		return this.number;
+
+	}
 
 }
