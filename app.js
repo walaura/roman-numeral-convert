@@ -110,6 +110,4 @@ const convert = number => {
 
 };
 
-console.log(convert(1997));
-
 module.exports = convert;
