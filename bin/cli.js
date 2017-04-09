@@ -2,4 +2,4 @@
 
 var convert = require('./../src/app.js');
 
-console.log(convert(process.argv[2]));
+process.stdout.write(convert(process.argv[2])+'\n');
