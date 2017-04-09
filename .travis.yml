@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+- node
+sudo: false
+cache:
+  directories:
+  - node_modules
+notifications:
+  email: false
+deploy:
+  provider: npm
+  email: lawr@lauragonzalez.cc
+  api_key:
+    secure: eG+9c7uuqwxKAQAUWl86Qg1HVxsu7NkBYmY+Xj9wgDpmfupFBAcdzgehLaegEJRw5hjXiTmIYLSup2xqmAnKfnU0Dbc99NTbFBLqzsT3mDSM3otWP40rICDPqlc6y2s0XgrFWBxaESUac0CT3M8jq+x5vWwInyMyOLNWIIQJrMat1ikEMjQz1PyJrJ8YaOIhMbFC/dOv1Muzv2dKx0gPESDaxEdGH2jv7hC7bR5Zn2uuuI0OvHO52ArYeuzveHCotoSGxeT8GgADEzKmiVkwiSeTKOCIk9wgJZAAOoII3UUe8RNd6DwuP5PAGstDEDGj4LhGgY2REfdyxyh7Jhvgm4+RnRHbe0oKvMmKSF+g1LdxiE+4iyKc4cAi1A7n0YVAPBeZzdwVk5pnlwbl9xfyQuZu8aTTy19ApBYOdrF3ofYEsdG/ZZa/WCavCcmCRsrOCs6EwYKsf9AEscJuj7/sep+0GEAEij2moWSrHoFe3nzzQnkGStnMgpMb1AjRXeW2aFei9KYrDG8k4QeG3d7rtdmMC+ITmpFTihmFcUzgD4J7k8tByQhPhUsnhd2RLCYWI59QHVW49mtyLnW7qsjJj5gxo5qg1+Nl/UMzTjrMf/7wCdBgtGvDhmkp7JEj46+VdVHIzRRhlDQqfiG+hZuncjnsVmGSqnUTAdKBluzUaRk=
+  on:
+    branch: master
+    repo: walaura/roman-numeral-converter
