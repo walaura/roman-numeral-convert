@@ -1,113 +1,145 @@
-const getTokens = require('./lib/getTokens.js');
+const getTokens = require('./lib/getTokens');
+const defaultData = require('./data/data');
 
-const getNumberForDigits = ({
-	initial,
-	current
-}) => {
 
-	let rt = '';
+module.exports = class {
 
-	if(!initial) {
-		rt += Array(current.digits+1).join(current.token.character);
-	}
-	else if(parseInt(initial.token.key - current.token.key * current.digits-initial.digits) === parseInt(current.token.key)) {
-		rt += current.token.character;
-	}
-	else {
-		rt += Array(current.digits+1).join(current.token.character);
-		rt += initial.token.character;
-	}
-	return rt;
+	getToken(
+		number,
+		index
+	) {
 
-};
+		let { tokens, tokenKeys } = getTokens(number,this.data);
+		return {
+			character: tokens[tokenKeys[index]],
+			key: tokenKeys[index]
+		};
 
-const getToken = (number,index) => {
-
-	let { tokens, tokenKeys } = getTokens(number);
-	return {
-		character: tokens[tokenKeys[index]],
-		key: tokenKeys[index]
 	};
 
-};
 
-const getNumberForPosition = ({number,index,initialNumber}) => {
 
-	let rt = '';
+	getNumberForTokenDigitConvo({
+		initial,
+		current
+	}){
 
-	let token = getToken(number,index);
-	let digits = initialNumber?
-		Math.floor(number/(initialNumber.token.key-token.key)):
-		Math.floor(number/token.key);
+		let rt = '';
 
-	if(digits > 0) {
-		rt += getNumberForDigits({
-			current: {
-				token: token,
-				digits: digits
-			},
-			initial: initialNumber?{
-				token: initialNumber.token,
-				digits: initialNumber.digits
-			}:undefined
-		});
-		number = number % token.key;
-	}
+		if(!initial) {
+			rt += Array(current.digits+1).join(current.token.character);
+		}
+		else if(parseInt(initial.token.key - current.token.key * current.digits-initial.digits) === parseInt(current.token.key)) {
+			rt += current.token.character;
+		}
+		else {
+			rt += Array(current.digits+1).join(current.token.character);
+			rt += initial.token.character;
+		}
+		return rt;
 
-	return {
-		token: token,
-		digits: digits,
-		number: number,
-		text: rt
 	};
 
-};
 
-const convert = number => {
 
-	number = parseInt(number);
+	getNumberForPosition({
+		number,
+		index,
+		initialNumber
+	}){
 
-	let rt = '';
-	let { tokenKeys } = getTokens(number);
+		let rt = '';
 
-	for(let i = tokenKeys.length - 1; i >= 0; i--) {
+		let token = this.getToken(number,index);
+		let digits = initialNumber?
+			Math.floor(number/(initialNumber.token.key-token.key)):
+			Math.floor(number/token.key);
 
-		if(number <= 0) {
-			break;
+		if(digits > 0) {
+			rt += this.getNumberForTokenDigitConvo({
+				current: {
+					token: token,
+					digits: digits
+				},
+				initial: initialNumber?{
+					token: initialNumber.token,
+					digits: initialNumber.digits
+				}:undefined
+			});
+			number = number % token.key;
 		}
 
-		let initialNumber = getNumberForPosition({
+		return {
+			token: token,
+			digits: digits,
 			number: number,
-			index: i
-		});
+			text: rt
+		};
 
-		number = initialNumber.number;
-		rt += initialNumber.text;
+	};
 
-		let backpropagationCandidates = [
-			getNumberForPosition({
-				number: number,
-				index: i-2,
-				initialNumber: initialNumber
-			}),
-			getNumberForPosition({
-				number: number,
-				index: i-1,
-				initialNumber: initialNumber
-			})
-		];
 
-		backpropagationCandidates.map(candidate => {
-			if(candidate.digits > 0 && Math.log10(candidate.token.key)%1 === 0) {
-				number = candidate.number;
-				rt += candidate.text;
-			}
-		});
+
+	toString() {
+
+		return this.number;
 
 	}
 
-	return rt;
 
-};
 
-module.exports = convert;
+	constructor(number,customData={}){
+
+		number = parseInt(number);
+		if(isNaN(number)) number = 0;
+
+		this.data = Object.assign({},defaultData,customData);
+
+		let negative = number < 0;
+		let returnable = '';
+		let { tokenKeys } = getTokens(number,this.data);
+
+		if(number === 0) {
+			return data.zero;
+		}
+
+		if(negative) {
+			number = number*-1;
+		}
+
+		for(let i = tokenKeys.length - 1; i >= 0; i--) {
+
+			if(number <= 0) {
+				break;
+			}
+
+			let initialNumber = this.getNumberForPosition({
+				number: number,
+				index: i
+			});
+			let backpropagationCandidates = [i-1,i-2];
+
+			number = initialNumber.number;
+			returnable += initialNumber.text;
+
+			backpropagationCandidates.map(candidateIndex => {
+
+				let candidate = this.getNumberForPosition({
+					number: number,
+					index: candidateIndex,
+					initialNumber: initialNumber
+				});
+				if(candidate.digits > 0 && Math.log10(candidate.token.key)%1 === 0) {
+					number = candidate.number;
+					returnable += candidate.text;
+				}
+
+			});
+
+		}
+
+		this.number = (negative?'-':'')+returnable;
+
+	};
+
+}
