@@ -1,5 +1,5 @@
 var assert = require('assert');
-var convert = require('./../app.js');
+var convert = require('./../src/app.js');
 
 describe('Basic', function() {
 
