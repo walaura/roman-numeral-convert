@@ -1,8 +1,14 @@
-const data = require('../data/data');
+const defaultData = require('../data/data');
 
 let cache = {};
 
-module.exports = max => {
+module.exports = (max=0,customData={}) => {
+
+	let data = Object.assign({},defaultData,customData);
+
+	if(JSON.stringify(data) !== JSON.stringify(cache.data)) {
+		cache = {};
+	}
 
 	if(!cache.tokens) cache.tokens = Object.assign({},data.tokens);
 	if(!cache.tokenKeys) cache.tokenKeys = Object.keys(data.tokens);
@@ -18,10 +24,13 @@ module.exports = max => {
 		});
 		tokenKeys = Object.keys(tokens);
 	}
-	if(tokens !== cache.tokens) {
+
+	if(JSON.stringify(tokens) !== JSON.stringify(cache.tokens)) {
 		cache.tokens = tokens;
 		cache.tokenKeys = tokenKeys;
+		cache.data = data;
 	}
+
 	return {
 		tokens: tokens,
 		tokenKeys: tokenKeys
