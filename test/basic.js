@@ -18,4 +18,8 @@ describe('Basic', function() {
 		assert.equal(convert(494),'CDXCIV');
 	});
 
+	it('should convert 1997 (yolo)', function() {
+		assert.equal(convert(1997),'MCMXCVII');
+	});
+
 });

@@ -14,7 +14,7 @@ const getNumberForDigits = ({
 		rt += current.token.character;
 	}
 	else {
-		rt += Array(current.digits-initial.digits+1).join(current.token.character);
+		rt += Array(current.digits+1).join(current.token.character);
 		rt += initial.token.character;
 	}
 	return rt;
@@ -84,25 +84,25 @@ const convert = number => {
 		number = initialNumber.number;
 		rt += initialNumber.text;
 
-		let prevPrevNumber = getNumberForPosition({
-			number: number,
-			index: i-2,
-			initialNumber: initialNumber
-		});
-		let prevNumber = getNumberForPosition({
-			number: number,
-			index: i-1,
-			initialNumber: initialNumber
-		});
+		let backpropagationCandidates = [
+			getNumberForPosition({
+				number: number,
+				index: i-2,
+				initialNumber: initialNumber
+			}),
+			getNumberForPosition({
+				number: number,
+				index: i-1,
+				initialNumber: initialNumber
+			})
+		];
 
-		if(prevPrevNumber.digits > 0 && Math.log10(prevPrevNumber.token.key)%1 === 0) {
-			number = prevPrevNumber.number;
-			rt += prevPrevNumber.text;
-		}
-		else if(prevNumber.digits > 0) {
-			number = prevNumber.number;
-			rt += prevNumber.text;
-		}
+		backpropagationCandidates.map(candidate => {
+			if(candidate.digits > 0 && Math.log10(candidate.token.key)%1 === 0) {
+				number = candidate.number;
+				rt += candidate.text;
+			}
+		})
 
 	}
 
@@ -110,6 +110,6 @@ const convert = number => {
 
 };
 
-console.log(convert(494));
+console.log(convert(1997));
 
 module.exports = convert;
