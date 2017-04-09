@@ -1,0 +1,23 @@
+{
+  "name": "roman-numeral-converter",
+  "version": "1.0.0",
+  "description": "converts decimal numbers to roman numerals",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/walaura/roman-numeral-converter.git"
+  },
+  "author": "Lau gonzalez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/walaura/roman-numeral-converter/issues"
+  },
+  "homepage": "https://github.com/walaura/roman-numeral-converter#readme",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "mocha": "^3.2.0"
+  }
+}

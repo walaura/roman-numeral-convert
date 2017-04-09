@@ -1,22 +1,25 @@
 const getTokens = require('./lib/getTokens.js');
 
-const getNumberForDigits = ({digits,current,shortDigits,previous}) => {
+const getNumberForDigits = ({
+	initial,
+	current
+}) => {
 
 	let rt = '';
 
-	if(!previous) {
-		rt += Array(digits+1).join(current.character);
+	if(!initial) {
+		rt += Array(current.digits+1).join(current.token.character);
 	}
-	else if(parseInt(current.key - previous.key * shortDigits-digits) === parseInt(previous.key)) {
-		rt += previous.character;
+	else if(parseInt(initial.token.key - current.token.key * current.digits-initial.digits) === parseInt(current.token.key)) {
+		rt += current.token.character;
 	}
 	else {
-		rt += Array(shortDigits-digits+1).join(previous.character);
-		rt += current.character;
+		rt += Array(current.digits-initial.digits+1).join(current.token.character);
+		rt += initial.token.character;
 	}
 	return rt;
 
-}
+};
 
 const getToken = (number,index) => {
 
@@ -24,9 +27,9 @@ const getToken = (number,index) => {
 	return {
 		character: tokens[tokenKeys[index]],
 		key: tokenKeys[index]
-	}
+	};
 
-}
+};
 
 const getNumberForPosition = ({number,index,initialNumber}) => {
 
@@ -39,11 +42,15 @@ const getNumberForPosition = ({number,index,initialNumber}) => {
 
 	if(digits > 0) {
 		rt += getNumberForDigits({
-			shortDigits: initialNumber? digits: undefined,
-			previous: initialNumber? token: undefined,
-			digits: initialNumber? initialNumber.digits : digits,
-			current: initialNumber? initialNumber.token : token
-		})
+			current: {
+				token: token,
+				digits: digits
+			},
+			initial: initialNumber?{
+				token: initialNumber.token,
+				digits: initialNumber.digits
+			}:undefined
+		});
 		number = number % token.key;
 	}
 
@@ -54,7 +61,7 @@ const getNumberForPosition = ({number,index,initialNumber}) => {
 		text: rt
 	};
 
-}
+};
 
 const convert = number => {
 
@@ -73,6 +80,7 @@ const convert = number => {
 			number: number,
 			index: i
 		});
+
 		number = initialNumber.number;
 		rt += initialNumber.text;
 
@@ -87,7 +95,7 @@ const convert = number => {
 			initialNumber: initialNumber
 		});
 
-		if(prevPrevNumber.digits > 0) {
+		if(prevPrevNumber.digits > 0 && Math.log10(prevPrevNumber.token.key)%1 === 0) {
 			number = prevPrevNumber.number;
 			rt += prevPrevNumber.text;
 		}
@@ -97,11 +105,11 @@ const convert = number => {
 		}
 
 	}
-	console.log(rt);
+
+	return rt;
 
 };
 
+console.log(convert(494));
 
-[1,2,3,4,5,6,7,8,9,10].map(n => {
-	convert(n);
-});
+module.exports = convert;
