@@ -1,6 +1,23 @@
 const getTokens = require('./lib/getTokens.js');
 
-const getNumberForDigits = ({
+
+
+const getToken = (
+	number,
+	index
+) => {
+
+	let { tokens, tokenKeys } = getTokens(number);
+	return {
+		character: tokens[tokenKeys[index]],
+		key: tokenKeys[index]
+	};
+
+};
+
+
+
+const getNumberForTokenDigitConvo = ({
 	initial,
 	current
 }) => {
@@ -21,17 +38,13 @@ const getNumberForDigits = ({
 
 };
 
-const getToken = (number,index) => {
 
-	let { tokens, tokenKeys } = getTokens(number);
-	return {
-		character: tokens[tokenKeys[index]],
-		key: tokenKeys[index]
-	};
 
-};
-
-const getNumberForPosition = ({number,index,initialNumber}) => {
+const getNumberForPosition = ({
+	number,
+	index,
+	initialNumber
+}) => {
 
 	let rt = '';
 
@@ -41,7 +54,7 @@ const getNumberForPosition = ({number,index,initialNumber}) => {
 		Math.floor(number/token.key);
 
 	if(digits > 0) {
-		rt += getNumberForDigits({
+		rt += getNumberForTokenDigitConvo({
 			current: {
 				token: token,
 				digits: digits
@@ -63,11 +76,13 @@ const getNumberForPosition = ({number,index,initialNumber}) => {
 
 };
 
+
+
 const convert = number => {
 
 	number = parseInt(number);
 
-	let rt = '';
+	let returnable = '';
 	let { tokenKeys } = getTokens(number);
 
 	for(let i = tokenKeys.length - 1; i >= 0; i--) {
@@ -80,34 +95,31 @@ const convert = number => {
 			number: number,
 			index: i
 		});
+		let backpropagationCandidates = [i-1,i-2];
 
 		number = initialNumber.number;
-		rt += initialNumber.text;
+		returnable += initialNumber.text;
 
-		let backpropagationCandidates = [
-			getNumberForPosition({
-				number: number,
-				index: i-2,
-				initialNumber: initialNumber
-			}),
-			getNumberForPosition({
-				number: number,
-				index: i-1,
-				initialNumber: initialNumber
-			})
-		];
+		backpropagationCandidates.map(candidateIndex => {
 
-		backpropagationCandidates.map(candidate => {
+			let candidate = getNumberForPosition({
+				number: number,
+				index: candidateIndex,
+				initialNumber: initialNumber
+			});
 			if(candidate.digits > 0 && Math.log10(candidate.token.key)%1 === 0) {
 				number = candidate.number;
-				rt += candidate.text;
+				returnable += candidate.text;
 			}
+
 		});
 
 	}
 
-	return rt;
+	return returnable;
 
 };
+
+
 
 module.exports = convert;
