@@ -15,7 +15,7 @@ Convert **any** integrer to a roman numeral provided it's not too large or it ma
     let nineteen = new Numeral(19); /*XIX*/
 
     /*you can also get the .number property to avoid type magic*/
-    new Numeral(19).number;
+    nineteen.number;
 
 ## cool things
 You can pass a second argument as to override anything on data/data
