@@ -1,4 +1,4 @@
-# roman-numeral-converter
+# roman-numeral-convert
 
 <center><img src="http://i.imgur.com/j1Zs8ad.gif"></center>
 
