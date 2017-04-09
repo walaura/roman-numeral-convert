@@ -1,13 +1,13 @@
 {
   "name": "roman-numeral-convert",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "converts decimal numbers to roman numerals",
   "main": "app.js",
   "scripts": {
     "test": "mocha"
   },
   "bin": {
-      "romannumeral" : "./bin/cli.js"
+      "roman-numeral-convert" : "./bin/cli.js"
   },
   "repository": {
     "type": "git",

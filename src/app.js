@@ -1,5 +1,5 @@
-const getTokens = require('./lib/getTokens.js');
-
+const getTokens = require('./lib/getTokens');
+const data = require('./data/data');
 
 
 const getToken = (
@@ -81,9 +81,19 @@ const getNumberForPosition = ({
 const convert = number => {
 
 	number = parseInt(number);
+	if(isNaN(number)) number = 0;
 
+	let negative = number < 0;
 	let returnable = '';
 	let { tokenKeys } = getTokens(number);
+
+	if(number === 0) {
+		return data.zero;
+	}
+
+	if(negative) {
+		number = number*-1;
+	}
 
 	for(let i = tokenKeys.length - 1; i >= 0; i--) {
 
@@ -116,7 +126,7 @@ const convert = number => {
 
 	}
 
-	return returnable;
+	return (negative?'-':'')+returnable;
 
 };
 
