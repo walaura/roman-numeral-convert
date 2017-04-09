@@ -1,6 +1,6 @@
 {
-  "name": "roman-numeral-converter",
-  "version": "1.0.0",
+  "name": "roman-numeral-convert",
+  "version": "1.0.1",
   "description": "converts decimal numbers to roman numerals",
   "main": "app.js",
   "scripts": {

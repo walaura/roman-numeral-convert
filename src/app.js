@@ -102,7 +102,7 @@ const convert = number => {
 				number = candidate.number;
 				rt += candidate.text;
 			}
-		})
+		});
 
 	}
 
