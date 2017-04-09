@@ -1,5 +1,5 @@
 {
-  "name": "roman-numeral-converter",
+  "name": "roman-numeral-convert",
   "version": "1.0.1",
   "description": "converts decimal numbers to roman numerals",
   "main": "app.js",
