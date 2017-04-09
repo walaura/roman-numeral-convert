@@ -21,9 +21,9 @@ You can pass a second argument as to override anything on data/data
     		5: '🙅',
     		10: '🤢',
     		50: '😻',
-    		100: 'C',
-    		500: 'D',
-    		1000: 'M',
+    		100: '🤡',
+    		500: '💩',
+    		1000: '🤖',
     	}
     }); /*🤢👉🤢*/
 
