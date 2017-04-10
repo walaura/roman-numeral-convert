@@ -86,11 +86,11 @@ module.exports = class {
 		if(isNaN(number)) number = 0;
 
 		let negative = number < 0;
-		let returnable = '';
+		let returnable = [];
 		let { tokenKeys } = getTokens(number,this.data);
 
 		if(number === 0) {
- 			return this.data.zero;
+ 			return [this.data.zero];
 		}
 
 		if(negative) {
@@ -110,7 +110,7 @@ module.exports = class {
 			let backpropagationCandidates = [i-1,i-2];
 
 			number = initialNumber.number;
-			returnable += initialNumber.text;
+			returnable.push(initialNumber.text);
 
 			backpropagationCandidates.map(candidateIndex => {
 
@@ -121,14 +121,15 @@ module.exports = class {
 				});
 				if(candidate.digits > 0 && Math.log10(candidate.token.key)%1 === 0) {
 					number = candidate.number;
-					returnable += candidate.text;
+					returnable.push(candidate.text);
 				}
 
 			});
 
 		}
 
- 		return (negative?'-':'')+returnable;
+		negative?returnable.push('-'):null;
+ 		return returnable;
 
 	}
 
@@ -137,9 +138,17 @@ module.exports = class {
 	constructor(number,customData={}){
 
 		this.data = Object.assign({},defaultData,customData);
-		this.number = this.convert(number);
+		this._number = this.convert(number);
 
 	};
+
+
+
+	get number() {
+
+		return this.data.joinNumberFn(this._number);
+		
+	}
 
 
 

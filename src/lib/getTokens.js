@@ -16,10 +16,10 @@ module.exports = (max=0,customData={}) => {
 	let {tokens, tokenKeys} = cache;
 
 	while(max > tokenKeys[tokenKeys.length -1]) {
-		let dimension = Math.ceil(tokenKeys.length/Object.keys(data.tokens).length)*3;
+		let dimension = Math.ceil(tokenKeys.length/Object.keys(data.tokens).length)*data.exponent;
 		Object.keys(data.tokens).map((key,index) => {
 			if(index > 0) {
-				tokens[key*Math.pow(10,dimension)] = data.tokens[key]+(Array(dimension/3-1).join(data.macron));
+				tokens[key*Math.pow(10,dimension)] = data.exponentFn(dimension/data.exponent-2,data.tokens[key])
 			}
 		});
 		tokenKeys = Object.keys(tokens);
