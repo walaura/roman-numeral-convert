@@ -16,10 +16,21 @@ module.exports = (max=0,customData={}) => {
 	let {tokens, tokenKeys} = cache;
 
 	while(max > tokenKeys[tokenKeys.length -1]) {
-		let dimension = Math.ceil(tokenKeys.length/Object.keys(data.tokens).length)*3;
+		let dimension = Math.ceil(tokenKeys.length/Object.keys(data.tokens).length)*data.exponent;
+		let pow = dimension/data.exponent-2;
+		if(pow > 4) throw(`Number ${max} is too large`);
 		Object.keys(data.tokens).map((key,index) => {
 			if(index > 0) {
-				tokens[key*Math.pow(10,dimension)] = data.tokens[key]+(Array(dimension/3-1).join(data.macron));
+				tokens[key*Math.pow(10,dimension)] = data.exponentFn(
+					pow,
+				{
+					key: key,
+					character: data.tokens[key]
+				},{
+					number: max,
+					exponent: data.exponent,
+					pow: key*Math.pow(10,dimension)
+				})
 			}
 		});
 		tokenKeys = Object.keys(tokens);

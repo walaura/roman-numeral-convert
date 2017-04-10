@@ -24,18 +24,18 @@ module.exports = class {
 		current
 	}){
 
-		let rt = '';
-
+		let rt = [];
 		if(!initial) {
-			rt += Array(current.digits+1).join(current.token.character);
+			rt = rt.concat(Array(current.digits+1).join(current.token.character+' ').split(' '));
 		}
 		else if(parseInt(initial.token.key - current.token.key * current.digits-initial.digits) === parseInt(current.token.key)) {
-			rt += current.token.character;
+			rt = rt.concat(current.token.character);
 		}
 		else {
-			rt += Array(current.digits+1).join(current.token.character);
-			rt += initial.token.character;
+			rt = rt.concat(Array(current.digits+1).join(current.token.character+' ').split(' '));
+			rt = rt.concat(initial.token.character);
 		}
+
 		return rt;
 
 	};
@@ -48,7 +48,7 @@ module.exports = class {
 		initialNumber
 	}){
 
-		let rt = '';
+		let rt = [];
 
 		let token = this.getToken(number,index);
 		let digits = initialNumber?
@@ -56,7 +56,7 @@ module.exports = class {
 			Math.floor(number/token.key);
 
 		if(digits > 0) {
-			rt += this.getNumberForTokenDigitConvo({
+			rt = rt.concat(this.getNumberForTokenDigitConvo({
 				current: {
 					token: token,
 					digits: digits
@@ -65,10 +65,9 @@ module.exports = class {
 					token: initialNumber.token,
 					digits: initialNumber.digits
 				}:undefined
-			});
+			}));
 			number = number % token.key;
 		}
-
 		return {
 			token: token,
 			digits: digits,
@@ -86,11 +85,11 @@ module.exports = class {
 		if(isNaN(number)) number = 0;
 
 		let negative = number < 0;
-		let returnable = '';
+		let returnable = [];
 		let { tokenKeys } = getTokens(number,this.data);
 
 		if(number === 0) {
- 			return this.data.zero;
+ 			return [this.data.zero];
 		}
 
 		if(negative) {
@@ -110,7 +109,7 @@ module.exports = class {
 			let backpropagationCandidates = [i-1,i-2];
 
 			number = initialNumber.number;
-			returnable += initialNumber.text;
+			returnable = returnable.concat(initialNumber.text);
 
 			backpropagationCandidates.map(candidateIndex => {
 
@@ -121,14 +120,17 @@ module.exports = class {
 				});
 				if(candidate.digits > 0 && Math.log10(candidate.token.key)%1 === 0) {
 					number = candidate.number;
-					returnable += candidate.text;
+					returnable = returnable.concat(candidate.text);
 				}
 
 			});
 
 		}
 
- 		return (negative?'-':'')+returnable;
+		returnable = returnable.filter(value => value.length > 0);
+		negative?returnable.unshift('-'):null;
+
+ 		return returnable;
 
 	}
 
@@ -137,9 +139,17 @@ module.exports = class {
 	constructor(number,customData={}){
 
 		this.data = Object.assign({},defaultData,customData);
-		this.number = this.convert(number);
+		this._number = this.convert(number);
 
 	};
+
+
+
+	get number() {
+
+		return this.data.joinNumberFn(this._number);
+
+	}
 
 
 

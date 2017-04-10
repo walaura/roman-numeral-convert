@@ -9,10 +9,21 @@ const tokens = {
 };
 
 const zero = 'N';
-const macron = String.fromCodePoint('773');
+
+const exponent = 3;
+const exponentFn = (pow,token,data={}) => {
+	const macron = String.fromCodePoint('773');
+	return token.character+(Array(pow+1).join(macron));
+}
+
+const joinNumberFn = (number) => {
+	return number.join('');
+}
 
 module.exports = {
 	tokens: tokens,
-	macron: macron,
+	exponent: exponent,
+	exponentFn: exponentFn,
+	joinNumberFn: joinNumberFn,
 	zero: zero
 };
