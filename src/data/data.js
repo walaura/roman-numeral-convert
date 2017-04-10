@@ -11,9 +11,8 @@ const tokens = {
 const zero = 'N';
 
 const exponent = 3;
-const exponentFn = (pow,token) => {
-	/*switch to non unicode macrons to on huge numbers to avoid crashing*/
-	const macron = (pow > 3)?'¯':String.fromCodePoint('773');
+const exponentFn = (pow,token,data={}) => {
+	const macron = String.fromCodePoint('773');
 	return token.character+(Array(pow+1).join(macron));
 }
 
