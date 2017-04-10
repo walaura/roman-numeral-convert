@@ -16,7 +16,6 @@ module.exports = (max=0,customData={}) => {
 	let {tokens, tokenKeys} = cache;
 
 	while(max > tokenKeys[tokenKeys.length -1]) {
-		console.log( Object.keys(tokens).length,Object.keys(data.tokens).length);
 		let dimension = Math.ceil(tokenKeys.length/Object.keys(data.tokens).length)*data.exponent;
 		let pow = dimension/data.exponent-2;
 		if(pow > 4) throw(`Number ${max} is too large`);
